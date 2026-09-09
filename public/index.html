@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job Spammer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <h1>Job Spammer</h1>
+    </header>
+
+    <section class="block">
+      <label class="lbl">Model</label>
+      <select id="model" class="input"></select>
+    </section>
+
+    <section class="block">
+      <label class="lbl">Job advert links</label>
+      <div class="row">
+        <textarea id="linkInput" class="input area" placeholder="Paste one or more job links (one per line)…"></textarea>
+        <button id="addBtn" class="btn">Add</button>
+      </div>
+    </section>
+
+    <section class="block">
+      <label class="lbl">CV</label>
+      <div class="row">
+        <input type="file" id="cvInput" hidden />
+        <button id="attachBtn" class="btn ghost">📎 Attach CV</button>
+        <span id="cvName" class="muted"></span>
+      </div>
+    </section>
+
+    <section class="block">
+      <button id="foldBtn" class="fold">▸ Applicant details</button>
+      <div id="foldBody" class="fold-body" hidden>
+        <div class="grid">
+          <label class="field"><span>Full name</span><input class="input" data-p="full_name" /></label>
+          <label class="field"><span>Email</span><input class="input" data-p="email" /></label>
+          <label class="field"><span>Phone</span><input class="input" data-p="phone" /></label>
+          <label class="field"><span>Location</span><input class="input" data-p="location" /></label>
+          <label class="field"><span>Specialty</span><input class="input" data-p="specialty" /></label>
+          <label class="field"><span>LinkedIn</span><input class="input" data-p="linkedin" /></label>
+          <label class="field"><span>Website</span><input class="input" data-p="website" /></label>
+          <label class="field"><span>Years experience</span><input class="input" data-p="experience" /></label>
+          <label class="field wide"><span>Cover note / summary</span><textarea class="input" data-p="summary"></textarea></label>
+        </div>
+        <button id="saveProfile" class="btn">Save details</button>
+        <span id="profileMsg" class="muted"></span>
+      </div>
+    </section>
+
+    <section class="block">
+      <button id="runBtn" class="btn run">▶ Run</button>
+      <span id="runMsg" class="muted"></span>
+    </section>
+
+    <section class="block">
+      <table class="console">
+        <thead><tr><th>#</th><th>Link</th><th>Status</th><th>Detail</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
