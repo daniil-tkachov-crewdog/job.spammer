@@ -37,17 +37,96 @@
     <section class="block">
       <button id="foldBtn" class="fold">▸ Applicant details</button>
       <div id="foldBody" class="fold-body" hidden>
+        <h4 class="subhead">Personal</h4>
         <div class="grid">
           <label class="field"><span>Full name</span><input class="input" data-p="full_name" /></label>
+          <label class="field"><span>First name</span><input class="input" data-p="first_name" /></label>
+          <label class="field"><span>Last name</span><input class="input" data-p="last_name" /></label>
+          <label class="field"><span>Preferred name</span><input class="input" data-p="preferred_name" /></label>
+          <label class="field"><span>Pronouns</span><input class="input" data-p="pronouns" /></label>
+          <label class="field"><span>Date of birth</span><input class="input" data-p="date_of_birth" placeholder="YYYY-MM-DD" /></label>
+          <label class="field"><span>Gender</span><input class="input" data-p="gender" /></label>
+          <label class="field"><span>Nationality</span><input class="input" data-p="nationality" /></label>
+        </div>
+
+        <h4 class="subhead">Contact &amp; address</h4>
+        <div class="grid">
           <label class="field"><span>Email</span><input class="input" data-p="email" /></label>
           <label class="field"><span>Phone</span><input class="input" data-p="phone" /></label>
-          <label class="field"><span>Location</span><input class="input" data-p="location" /></label>
+          <label class="field"><span>Address line 1</span><input class="input" data-p="address_line1" /></label>
+          <label class="field"><span>Address line 2</span><input class="input" data-p="address_line2" /></label>
+          <label class="field"><span>City</span><input class="input" data-p="city" /></label>
+          <label class="field"><span>State / region</span><input class="input" data-p="state_region" /></label>
+          <label class="field"><span>Postal code</span><input class="input" data-p="postal_code" /></label>
+          <label class="field"><span>Country</span><input class="input" data-p="country" /></label>
+          <label class="field"><span>Location (city, country)</span><input class="input" data-p="location" /></label>
+        </div>
+
+        <h4 class="subhead">Current employment</h4>
+        <div class="grid">
+          <label class="field"><span>Current title</span><input class="input" data-p="current_title" /></label>
+          <label class="field"><span>Current company</span><input class="input" data-p="current_company" /></label>
+          <label class="field"><span>Current salary</span><input class="input" data-p="current_salary" /></label>
           <label class="field"><span>Specialty</span><input class="input" data-p="specialty" /></label>
+          <label class="field"><span>Years experience</span><input class="input" data-p="experience" /></label>
+        </div>
+
+        <h4 class="subhead">Job preferences</h4>
+        <div class="grid">
+          <label class="field"><span>Desired salary</span><input class="input" data-p="desired_salary" /></label>
+          <label class="field"><span>Notice period</span><input class="input" data-p="notice_period" /></label>
+          <label class="field"><span>Earliest start date</span><input class="input" data-p="earliest_start_date" placeholder="YYYY-MM-DD" /></label>
+          <label class="field"><span>Willing to relocate</span>
+            <select class="input" data-p="willing_to_relocate"><option value=""></option><option>Yes</option><option>No</option></select>
+          </label>
+          <label class="field"><span>Remote preference</span>
+            <select class="input" data-p="remote_preference"><option value=""></option><option>Remote</option><option>Hybrid</option><option>On-site</option><option>Flexible</option></select>
+          </label>
+          <label class="field"><span>Work authorization</span><input class="input" data-p="work_authorization" placeholder="e.g. EU citizen, US work visa" /></label>
+          <label class="field"><span>Requires sponsorship</span>
+            <select class="input" data-p="requires_sponsorship"><option value=""></option><option>Yes</option><option>No</option></select>
+          </label>
+        </div>
+
+        <h4 class="subhead">Education</h4>
+        <div class="grid">
+          <label class="field"><span>Highest education</span><input class="input" data-p="highest_education" /></label>
+          <label class="field"><span>Field of study</span><input class="input" data-p="field_of_study" /></label>
+          <label class="field"><span>School / university</span><input class="input" data-p="school" /></label>
+          <label class="field"><span>Graduation year</span><input class="input" data-p="graduation_year" /></label>
+        </div>
+
+        <h4 class="subhead">Professional</h4>
+        <div class="grid">
+          <label class="field wide"><span>Skills</span><textarea class="input" data-p="skills"></textarea></label>
+          <label class="field wide"><span>Certifications</span><textarea class="input" data-p="certifications"></textarea></label>
+          <label class="field"><span>Languages</span><input class="input" data-p="languages" /></label>
+          <label class="field wide"><span>Cover letter</span><textarea class="input" data-p="cover_letter"></textarea></label>
+          <label class="field wide"><span>Cover note / summary</span><textarea class="input" data-p="summary"></textarea></label>
+          <label class="field wide"><span>References</span><textarea class="input" data-p="references_text"></textarea></label>
+        </div>
+
+        <h4 class="subhead">Links</h4>
+        <div class="grid">
           <label class="field"><span>LinkedIn</span><input class="input" data-p="linkedin" /></label>
           <label class="field"><span>Website</span><input class="input" data-p="website" /></label>
-          <label class="field"><span>Years experience</span><input class="input" data-p="experience" /></label>
-          <label class="field wide"><span>Cover note / summary</span><textarea class="input" data-p="summary"></textarea></label>
+          <label class="field"><span>Portfolio</span><input class="input" data-p="portfolio" /></label>
+          <label class="field"><span>GitHub</span><input class="input" data-p="github" /></label>
+          <label class="field"><span>Twitter / X</span><input class="input" data-p="twitter" /></label>
         </div>
+
+        <h4 class="subhead">Diversity &amp; EEO <span class="opt">(optional)</span></h4>
+        <div class="grid">
+          <label class="field"><span>Ethnicity</span><input class="input" data-p="ethnicity" /></label>
+          <label class="field"><span>Veteran status</span><input class="input" data-p="veteran_status" /></label>
+          <label class="field"><span>Disability status</span><input class="input" data-p="disability_status" /></label>
+        </div>
+
+        <h4 class="subhead">Other</h4>
+        <div class="grid">
+          <label class="field wide"><span>How did you hear about us?</span><input class="input" data-p="how_did_you_hear" /></label>
+        </div>
+
         <button id="saveProfile" class="btn">Save details</button>
         <span id="profileMsg" class="muted"></span>
       </div>

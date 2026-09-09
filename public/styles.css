@@ -56,6 +56,9 @@ select.input { cursor: pointer; }
 .field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
 .field span { color: var(--muted); }
 .field.wide { grid-column: 1 / -1; }
+.subhead { margin: 18px 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--accent2); font-weight: 700; }
+.subhead:first-child { margin-top: 0; }
+.subhead .opt { color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
 .field textarea.input { min-height: 60px; resize: vertical; }
 .console {
   width: 100%; border-collapse: collapse; background: var(--panel);
