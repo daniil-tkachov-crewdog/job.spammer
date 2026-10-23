@@ -17,7 +17,14 @@
         <label>Phone<input name="phone"></label>
         <label>Email<input name="email" type="email"></label>
         <label>Location<input name="location" placeholder="City, Country"></label>
-        <label class="wide">Latest company<input name="company" required></label>
+        <label>Latest company<input name="company" required></label>
+        <label>Jobs in CV (incl. latest)
+          <select name="jobCount">
+            <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
+          </select>
+        </label>
+        <label class="wide">Education <span class="opt">(optional — blank = AI invents)</span><input name="education" placeholder="BSc Computer Science, University of Manchester, 2013–2017"></label>
+        <label class="wide">Languages <span class="opt">(optional — blank = AI invents)</span><input name="languages" placeholder="English native, French B2"></label>
       </div>
       <label>Job description<textarea name="jobDescription" rows="12" required placeholder="Paste the full job description here…"></textarea></label>
       <button id="start" type="submit">Start</button>

@@ -17,16 +17,19 @@ Rules:
 - The most recent job MUST be at the company the user gives ("latestCompany"), current (end = "Present"), started 2-4 years ago.
   Its job title must closely mirror the advertised role. Write 5-6 strong bullets that mirror the job's responsibilities and
   requirements, using strong action verbs and concrete, plausible metrics.
-- Add 2 earlier roles at realistic, plausible companies (not famous brands) that show a logical career progression toward
-  the advertised role, 3-4 bullets each.
+- The experience array must contain EXACTLY "totalJobs" entries, including the latest one. Earlier roles are at realistic,
+  plausible companies (not famous brands), show a logical career progression toward the advertised role, 3-4 bullets each
+  (2-3 bullets each if totalJobs is 4 or more).
 - Total years of experience should satisfy the job's requirements.
 - Skills: cover every hard skill, tool, technology and methodology in the job description, plus a few relevant extras.
   Group them into 3-5 categories.
 - Summary: 3 sentences, tailored to the role, naming the title and years of experience.
-- Education: 1 relevant degree from a real, plausible university matching the location's country. Certifications: 0-3 relevant ones.
-- Languages: include English plus any language the job asks for.
+- Education: if "education" is given, use it as-is (only split it into fields; invent missing dates consistent with the career).
+  Otherwise invent 1 relevant degree from a real, plausible university matching the location's country.
+- Certifications: 0-3 relevant ones.
+- Languages: if "languages" is given, use exactly those (normalise levels). Otherwise include English plus any language the job asks for.
 - Use the job description's keywords verbatim where natural (ATS). Write in the job description's language.
-- Must fit on ONE A4 page: be concise; bullets max ~25 words.
+- Be concise (bullets max ~25 words). Aim for one A4 page; two pages are acceptable only when totalJobs is 4 or more.
 
 Return ONLY JSON with this exact shape:
 {
@@ -40,7 +43,8 @@ Return ONLY JSON with this exact shape:
 }`;
 
 app.post('/api/generate', async (req, res) => {
-  const { jobDescription, name, phone, email, location, company } = req.body || {};
+  const { jobDescription, name, phone, email, location, company, education, languages } = req.body || {};
+  const totalJobs = Math.min(5, Math.max(1, parseInt(req.body?.jobCount, 10) || 3));
   if (!jobDescription?.trim()) return res.status(400).json({ error: 'Job description is required' });
   if (!company?.trim()) return res.status(400).json({ error: 'Company name is required' });
 
@@ -57,6 +61,9 @@ app.post('/api/generate', async (req, res) => {
             today: new Date().toISOString().slice(0, 10),
             candidateLocation: location,
             latestCompany: company,
+            totalJobs,
+            education: education?.trim() || undefined,
+            languages: languages?.trim() || undefined,
             jobDescription,
           }),
         },
