@@ -14,7 +14,8 @@ const SYSTEM_PROMPT = `You are an expert CV writer and ATS optimisation speciali
 Given a job description and a candidate's personal details, write a CV that is a perfect match for the job.
 
 Rules:
-- The most recent job MUST be at the company the user gives ("latestCompany"), current (end = "Present"), started 2-4 years ago.
+- The most recent job MUST be at the company the user gives ("latestCompany"), current (end = "Present"), started at
+  "latestJobStart" if given (use it exactly), otherwise 2-4 years ago.
   Its job title must closely mirror the advertised role. Write 5-6 strong bullets that mirror the job's responsibilities and
   requirements, using strong action verbs and concrete, plausible metrics. If "latestCompanyCountry" is given, the latest
   job's location is that country (optionally with a plausible major city in it); it may differ from the candidate's location.
@@ -43,8 +44,24 @@ Return ONLY JSON with this exact shape:
   "languages": [{ "language": "string", "level": "string" }]
 }`;
 
+// "2.5" years -> "Apr 2024" (start month counted back from today)
+function jobStart(years) {
+  const months = Math.round(parseFloat(years) * 12);
+  if (!(months > 0)) return undefined;
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() - months);
+  return d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+}
+
+// Firstname_Lastname_Job_Title.pdf
+function pdfFilename(cv) {
+  const clean = (s) => String(s || '').trim().replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_|_$/g, '');
+  return `${[clean(cv.personal?.name), clean(cv.title)].filter(Boolean).join('_') || 'CV'}.pdf`;
+}
+
 app.post('/api/generate', async (req, res) => {
-  const { jobDescription, name, phone, email, location, company, companyCountry, education, languages } =
+  const { jobDescription, name, phone, email, location, company, companyCountry, companyYears, education, languages } =
     req.body || {};
   const totalJobs = Math.min(5, Math.max(1, parseInt(req.body?.jobCount, 10) || 3));
   if (!jobDescription?.trim()) return res.status(400).json({ error: 'Job description is required' });
@@ -64,6 +81,7 @@ app.post('/api/generate', async (req, res) => {
             candidateLocation: location,
             latestCompany: company,
             latestCompanyCountry: companyCountry?.trim() || undefined,
+            latestJobStart: jobStart(companyYears),
             totalJobs,
             education: education?.trim() || undefined,
             languages: languages?.trim() || undefined,
@@ -97,8 +115,11 @@ app.post('/api/pdf', async (req, res) => {
     page = await browser.newPage();
     await page.setContent(renderCV(cv), { waitUntil: 'networkidle' });
     const pdf = await page.pdf({ format: 'A4', printBackground: true, preferCSSPageSize: true });
-    const filename = `${(cv.personal?.name || 'CV').replace(/[^\w]+/g, '_')}_CV.pdf`;
-    res.set({ 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="${filename}"` });
+    const filename = pdfFilename(cv);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="CV.pdf"; filename*=UTF-8''${encodeURIComponent(filename)}`,
+    });
     res.send(pdf);
   } catch (err) {
     console.error(err);

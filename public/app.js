@@ -5,7 +5,7 @@ const result = document.getElementById('result');
 const preview = document.getElementById('preview');
 const downloadBtn = document.getElementById('download');
 
-const SAVED = ['name', 'phone', 'email', 'location', 'company', 'companyCountry', 'jobCount', 'education', 'languages'];
+const SAVED = ['name', 'phone', 'email', 'location', 'company', 'companyCountry', 'companyYears', 'jobCount', 'education', 'languages'];
 let currentCV = null;
 
 try {
@@ -60,7 +60,8 @@ downloadBtn.addEventListener('click', async () => {
     const blob = await res.blob();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `${(currentCV.personal?.name || 'CV').replace(/[^\w]+/g, '_')}_CV.pdf`;
+    const disposition = res.headers.get('Content-Disposition') || '';
+    a.download = decodeURIComponent(disposition.match(/filename\*=UTF-8''([^;]+)/)?.[1] || 'CV.pdf');
     a.click();
     URL.revokeObjectURL(a.href);
   } catch (err) {
