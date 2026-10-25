@@ -44,6 +44,20 @@ Return ONLY JSON with this exact shape:
   "languages": [{ "language": "string", "level": "string" }]
 }`;
 
+const CAREER_CHANGE_RULES = `
+
+CAREER CHANGE MODE — these rules OVERRIDE any conflicting rule above:
+- The candidate is switching careers and has NOT worked in the advertised role or field before. Do not fake direct experience in it.
+- Job titles must be from a different but adjacent field (never the advertised title). The latest job's title is a plausible role
+  at "latestCompany" whose work overlaps with the target job (e.g. an analyst moving into product, a teacher into L&D).
+- Bullets highlight TRANSFERABLE achievements that map onto the job's requirements: shared tools, methods, stakeholders,
+  outcomes, and side projects or initiatives inside the role that touched the target field. Keep concrete, plausible metrics.
+- Title/headline: the target role framed as a transition (e.g. "Aspiring Product Manager | Data Analyst with 6 years in SaaS").
+- Summary: frame the move as a deliberate career change, naming the transferable strengths and motivation for the new field.
+- Skills: put the transferable skills first, then target-field skills the candidate has been building.
+- Certifications: include 1-3 recent courses or certifications in the target field to show commitment.
+- Years of experience refers to total professional experience, not experience in the target field.`;
+
 // "2.5" years -> "Apr 2024" (start month counted back from today)
 function jobStart(years) {
   const months = Math.round(parseFloat(years) * 12);
@@ -61,7 +75,7 @@ function pdfFilename(cv) {
 }
 
 app.post('/api/generate', async (req, res) => {
-  const { jobDescription, name, phone, email, location, company, companyCountry, companyYears, education, languages } =
+  const { jobDescription, name, phone, email, location, company, companyCountry, companyYears, education, languages, careerChange } =
     req.body || {};
   const totalJobs = Math.min(5, Math.max(1, parseInt(req.body?.jobCount, 10) || 3));
   if (!jobDescription?.trim()) return res.status(400).json({ error: 'Job description is required' });
@@ -73,7 +87,7 @@ app.post('/api/generate', async (req, res) => {
       temperature: 0.7,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: careerChange ? SYSTEM_PROMPT + CAREER_CHANGE_RULES : SYSTEM_PROMPT },
         {
           role: 'user',
           content: JSON.stringify({

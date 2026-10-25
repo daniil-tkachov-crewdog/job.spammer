@@ -11,6 +11,7 @@ let currentCV = null;
 try {
   const saved = JSON.parse(localStorage.getItem('cvb-fields') || '{}');
   SAVED.forEach((k) => { if (saved[k]) form.elements[k].value = saved[k]; });
+  form.elements.careerChange.checked = !!saved.careerChange;
 } catch {}
 
 function setStatus(msg, isError = false) {
@@ -21,8 +22,9 @@ function setStatus(msg, isError = false) {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(form));
+  data.careerChange = form.elements.careerChange.checked;
   try {
-    localStorage.setItem('cvb-fields', JSON.stringify(Object.fromEntries(SAVED.map((k) => [k, data[k]]))));
+    localStorage.setItem('cvb-fields', JSON.stringify(Object.fromEntries([...SAVED, 'careerChange'].map((k) => [k, data[k]]))));
   } catch {}
 
   startBtn.disabled = true;

@@ -28,6 +28,11 @@
         <label class="wide">Education <span class="opt">(optional — blank = AI invents)</span><input name="education" placeholder="BSc Computer Science, University of Manchester, 2013–2017"></label>
         <label class="wide">Languages <span class="opt">(optional — blank = AI invents)</span><input name="languages" placeholder="English native, French B2"></label>
       </div>
+      <label class="switch">
+        <input type="checkbox" name="careerChange">
+        <span class="track"></span>
+        Career change mode <span class="opt">— no prior experience in this field; CV shows transferable experience instead</span>
+      </label>
       <label>Job description<textarea name="jobDescription" rows="12" required placeholder="Paste the full job description here…"></textarea></label>
       <button id="start" type="submit">Start</button>
       <p id="status"></p>
