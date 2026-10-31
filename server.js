@@ -19,6 +19,8 @@ Rules:
   Its job title must closely mirror the advertised role. Write 5-6 strong bullets that mirror the job's responsibilities and
   requirements, using strong action verbs and concrete, plausible metrics. If "latestCompanyCountry" is given, the latest
   job's location is that country (optionally with a plausible major city in it); it may differ from the candidate's location.
+  If "latestCompanyDescription" is given, it says what that company does: keep the latest job's title and bullets realistic
+  for that kind of business (e.g. a grocery chain has stores, customers, stock, tills — not SaaS products).
 - The experience array must contain EXACTLY "totalJobs" entries, including the latest one. Earlier roles are at realistic,
   plausible companies (not famous brands), show a logical career progression toward the advertised role, 3-4 bullets each
   (2-3 bullets each if totalJobs is 4 or more).
@@ -76,7 +78,7 @@ function pdfFilename(cv) {
 }
 
 app.post('/api/generate', async (req, res) => {
-  const { jobDescription, name, phone, email, location, company, companyCountry, companyYears, education, languages, careerChange } =
+  const { jobDescription, name, phone, email, location, company, companyCountry, companyDescription, companyYears, education, languages, careerChange } =
     req.body || {};
   const totalJobs = Math.min(5, Math.max(1, parseInt(req.body?.jobCount, 10) || 3));
   if (!jobDescription?.trim()) return res.status(400).json({ error: 'Job description is required' });
@@ -96,6 +98,7 @@ app.post('/api/generate', async (req, res) => {
             candidateLocation: location,
             latestCompany: company,
             latestCompanyCountry: companyCountry?.trim() || undefined,
+            latestCompanyDescription: companyDescription?.trim() || undefined,
             latestJobStart: jobStart(companyYears),
             totalJobs,
             education: education?.trim() || undefined,
