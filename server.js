@@ -52,7 +52,8 @@ CAREER CHANGE MODE — these rules OVERRIDE any conflicting rule above:
   at "latestCompany" whose work overlaps with the target job (e.g. an analyst moving into product, a teacher into L&D).
 - Bullets highlight TRANSFERABLE achievements that map onto the job's requirements: shared tools, methods, stakeholders,
   outcomes, and side projects or initiatives inside the role that touched the target field. Keep concrete, plausible metrics.
-- Title/headline: the target role framed as a transition (e.g. "Aspiring Product Manager | Data Analyst with 6 years in SaaS").
+- Title/headline: just the advertised job title, plain and simple (e.g. "Front Desk Associate"). No "Aspiring", no "|",
+  no years, no second title.
 - Summary: frame the move as a deliberate career change, naming the transferable strengths and motivation for the new field.
 - Skills: put the transferable skills first, then target-field skills the candidate has been building.
 - Certifications: include 1-3 recent courses or certifications in the target field to show commitment.
