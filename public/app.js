@@ -5,7 +5,7 @@ const result = document.getElementById('result');
 const preview = document.getElementById('preview');
 const downloadBtn = document.getElementById('download');
 
-const SAVED = ['name', 'phone', 'email', 'location', 'company', 'companyCountry', 'companyDescription', 'companyYears', 'jobCount', 'education', 'languages'];
+const SAVED = ['name', 'phone', 'email', 'location', 'company', 'companyCountry', 'companyDescription', 'companyYears', 'company2', 'companyCountry2', 'companyDescription2', 'companyYears2', 'jobCount', 'education', 'languages'];
 let currentCV = null;
 
 try {

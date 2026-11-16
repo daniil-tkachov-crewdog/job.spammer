@@ -14,13 +14,17 @@ const SYSTEM_PROMPT = `You are an expert CV writer and ATS optimisation speciali
 Given a job description and a candidate's personal details, write a CV that is a perfect match for the job.
 
 Rules:
-- The most recent job MUST be at the company the user gives ("latestCompany"), current (end = "Present"), started at
-  "latestJobStart" if given (use it exactly), otherwise 2-4 years ago.
+- No dates or time frames anywhere in the experience section: jobs are simply listed one after another, most recent first.
+- The most recent job MUST be at the company the user gives ("latestCompany"). "latestCompanyYears" (if given) is how long the
+  candidate has been there; use it only to judge seniority and total experience.
   Its job title must closely mirror the advertised role. Write 5-6 strong bullets that mirror the job's responsibilities and
   requirements, using strong action verbs and concrete, plausible metrics. If "latestCompanyCountry" is given, the latest
   job's location is that country (optionally with a plausible major city in it); it may differ from the candidate's location.
   If "latestCompanyDescription" is given, it says what that company does: keep the latest job's title and bullets realistic
   for that kind of business (e.g. a grocery chain has stores, customers, stock, tills — not SaaS products).
+- If "previousCompany" is given, the SECOND job MUST be at previousCompany.name, with the same rules as the latest job for its
+  "country" and "description" fields ("years" = how long they worked there). Its title is a logical step before the latest
+  role, 3-4 bullets.
 - The experience array must contain EXACTLY "totalJobs" entries, including the latest one. Earlier roles are at realistic,
   plausible companies (not famous brands), show a logical career progression toward the advertised role, 3-4 bullets each
   (2-3 bullets each if totalJobs is 4 or more).
@@ -40,7 +44,7 @@ Return ONLY JSON with this exact shape:
   "title": "string (professional headline = target role)",
   "summary": "string",
   "skills": [{ "category": "string", "items": ["string"] }],
-  "experience": [{ "title": "string", "company": "string", "location": "string", "start": "MMM YYYY", "end": "MMM YYYY | Present", "bullets": ["string"] }],
+  "experience": [{ "title": "string", "company": "string", "location": "string", "bullets": ["string"] }],
   "education": [{ "degree": "string", "school": "string", "location": "string", "start": "YYYY", "end": "YYYY" }],
   "certifications": ["string"],
   "languages": [{ "language": "string", "level": "string" }]
@@ -61,16 +65,6 @@ CAREER CHANGE MODE — these rules OVERRIDE any conflicting rule above:
 - Certifications: include 1-3 recent courses or certifications in the target field to show commitment.
 - Years of experience refers to total professional experience, not experience in the target field.`;
 
-// "2.5" years -> "Apr 2024" (start month counted back from today)
-function jobStart(years) {
-  const months = Math.round(parseFloat(years) * 12);
-  if (!(months > 0)) return undefined;
-  const d = new Date();
-  d.setDate(1);
-  d.setMonth(d.getMonth() - months);
-  return d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
-}
-
 // Firstname_Lastname_Job_Title.pdf
 function pdfFilename(cv) {
   const clean = (s) => String(s || '').trim().replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_|_$/g, '');
@@ -78,9 +72,9 @@ function pdfFilename(cv) {
 }
 
 app.post('/api/generate', async (req, res) => {
-  const { jobDescription, name, phone, email, location, company, companyCountry, companyDescription, companyYears, education, languages, careerChange } =
+  const { jobDescription, name, phone, email, location, company, companyCountry, companyDescription, companyYears, company2, companyCountry2, companyDescription2, companyYears2, education, languages, careerChange } =
     req.body || {};
-  const totalJobs = Math.min(5, Math.max(1, parseInt(req.body?.jobCount, 10) || 3));
+  const totalJobs = Math.min(5, Math.max(company2?.trim() ? 2 : 1, parseInt(req.body?.jobCount, 10) || 3));
   if (!jobDescription?.trim()) return res.status(400).json({ error: 'Job description is required' });
   if (!company?.trim()) return res.status(400).json({ error: 'Company name is required' });
 
@@ -99,7 +93,15 @@ app.post('/api/generate', async (req, res) => {
             latestCompany: company,
             latestCompanyCountry: companyCountry?.trim() || undefined,
             latestCompanyDescription: companyDescription?.trim() || undefined,
-            latestJobStart: jobStart(companyYears),
+            latestCompanyYears: parseFloat(companyYears) || undefined,
+            previousCompany: company2?.trim()
+              ? {
+                  name: company2.trim(),
+                  country: companyCountry2?.trim() || undefined,
+                  description: companyDescription2?.trim() || undefined,
+                  years: parseFloat(companyYears2) || undefined,
+                }
+              : undefined,
             totalJobs,
             education: education?.trim() || undefined,
             languages: languages?.trim() || undefined,

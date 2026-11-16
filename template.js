@@ -11,7 +11,7 @@ export function renderCV(cv) {
     .map(
       (j) => `
       <div class="item">
-        <div class="row"><strong>${esc(j.title)}</strong><span class="date">${esc(j.start)} – ${esc(j.end)}</span></div>
+        <div class="row"><strong>${esc(j.title)}</strong></div>
         <div class="row sub"><span>${esc(j.company)}</span><span>${esc(j.location)}</span></div>
         <ul>${(j.bullets || []).map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
       </div>`
